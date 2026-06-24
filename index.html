@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>还愿日记 · 三宝佛光寺四面佛祖</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700&family=Noto+Sans+SC:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#1C1410;          /* 暗夜底 deep warm near-black */
+    --ink-2:#241A14;        /* raised panel */
+    --oxblood:#4A130E;      /* 朱漆 lacquer */
+    --oxblood-2:#651A12;
+    --gold:#C9A24B;         /* 鎏金 */
+    --gold-bright:#F0C868;  /* 暖烛光 */
+    --sand:#8A6A4F;         /* 檀木 */
+    --paper:#EDE3D0;        /* 米纸 text */
+    --paper-dim:#B9A98E;
+    --jade:#7A9B86;         /* 莲 secondary, used sparingly */
+    --line:rgba(201,162,75,.22);
+    --serif:'Noto Serif SC', 'Songti SC', 'STSong', serif;
+    --sans:'Noto Sans SC','PingFang SC','Microsoft YaHei',sans-serif;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    font-family:var(--sans);
+    color:var(--paper);
+    background:
+      radial-gradient(120% 70% at 50% -10%, rgba(240,200,104,.10), transparent 60%),
+      radial-gradient(90% 50% at 50% 0%, rgba(101,26,18,.45), transparent 55%),
+      var(--ink);
+    min-height:100vh;
+    line-height:1.7;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:600px;margin:0 auto;padding:28px 22px 64px;}
+
+  /* ---- masthead ---- */
+  .crest{display:flex;flex-direction:column;align-items:center;text-align:center;margin:14px 0 26px;}
+  .flame{
+    width:54px;height:54px;border-radius:50%;
+    background:radial-gradient(circle at 50% 38%, var(--gold-bright), var(--gold) 45%, rgba(74,19,14,.6) 80%);
+    box-shadow:0 0 26px rgba(240,200,104,.45), inset 0 0 10px rgba(74,19,14,.5);
+    margin-bottom:14px;position:relative;
+    animation:glow 4.5s ease-in-out infinite;
+  }
+  .flame::after{content:"";position:absolute;inset:0;border-radius:50%;border:1px solid rgba(240,200,104,.5);}
+  @keyframes glow{0%,100%{box-shadow:0 0 22px rgba(240,200,104,.38),inset 0 0 10px rgba(74,19,14,.5)}50%{box-shadow:0 0 34px rgba(240,200,104,.6),inset 0 0 10px rgba(74,19,14,.5)}}
+  .eyebrow{font-size:12px;letter-spacing:.42em;color:var(--gold);text-indent:.42em;margin:0 0 8px;}
+  .masthead-title{font-family:var(--serif);font-weight:700;font-size:34px;letter-spacing:.16em;text-indent:.16em;margin:0;color:var(--paper);}
+  .masthead-sub{font-size:13px;color:var(--paper-dim);letter-spacing:.06em;margin-top:8px;}
+
+  /* ---- views ---- */
+  .view{display:none;animation:rise .45s cubic-bezier(.2,.7,.2,1) both;}
+  .view.active{display:block;}
+  @keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+
+  .lede{font-family:var(--serif);font-size:18px;color:var(--paper);text-align:center;margin:6px auto 4px;max-width:30ch;line-height:1.85;}
+  .note{font-size:13px;color:var(--paper-dim);text-align:center;max-width:30ch;margin:10px auto 26px;}
+
+  /* ---- buttons ---- */
+  .btn{
+    display:block;width:100%;border:none;cursor:pointer;
+    font-family:var(--sans);font-size:16px;font-weight:500;letter-spacing:.08em;
+    padding:16px 20px;border-radius:14px;margin:12px 0;color:var(--ink);
+    background:linear-gradient(180deg,var(--gold-bright),var(--gold));
+    box-shadow:0 6px 18px rgba(201,162,75,.22);transition:transform .15s ease, box-shadow .15s ease;
+  }
+  .btn:hover{transform:translateY(-1px);box-shadow:0 10px 24px rgba(201,162,75,.3);}
+  .btn:active{transform:translateY(0);}
+  .btn.ghost{
+    background:transparent;color:var(--gold);border:1px solid var(--line);box-shadow:none;font-weight:400;
+  }
+  .btn.ghost:hover{background:rgba(201,162,75,.06);}
+  .btn.oxblood{background:linear-gradient(180deg,var(--oxblood-2),var(--oxblood));color:var(--paper);box-shadow:0 6px 18px rgba(74,19,14,.4);}
+  .btn:focus-visible, a:focus-visible, .face:focus-visible, input:focus-visible, textarea:focus-visible{outline:2px solid var(--gold-bright);outline-offset:3px;}
+  .backlink{display:inline-flex;align-items:center;gap:6px;color:var(--paper-dim);font-size:13px;background:none;border:none;cursor:pointer;padding:6px 0;margin-bottom:6px;}
+  .backlink:hover{color:var(--gold);}
+
+  /* ---- four-direction selector (signature) ---- */
+  .selector-label{font-family:var(--serif);font-size:17px;text-align:center;color:var(--paper);margin:8px 0 2px;}
+  .selector-hint{font-size:12.5px;color:var(--paper-dim);text-align:center;margin:0 0 14px;}
+  .compass{position:relative;width:min(86vw,360px);aspect-ratio:1/1;margin:0 auto 6px;}
+  .compass-core{
+    position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+    width:30%;aspect-ratio:1;border-radius:50%;display:grid;place-items:center;
+    background:radial-gradient(circle at 50% 40%, var(--gold-bright),var(--gold) 50%, var(--oxblood) 92%);
+    box-shadow:0 0 24px rgba(240,200,104,.35), inset 0 0 12px rgba(74,19,14,.6);
+    color:var(--oxblood);font-family:var(--serif);font-weight:700;font-size:15px;letter-spacing:.1em;
+    text-align:center;line-height:1.25;
+  }
+  .face{
+    position:absolute;width:43%;padding:12px 8px;border-radius:13px;cursor:pointer;
+    background:var(--ink-2);border:1px solid var(--line);color:var(--paper);
+    text-align:center;transition:all .2s ease;
+  }
+  .face .f-no{display:block;font-family:var(--serif);font-size:15px;font-weight:600;color:var(--gold);letter-spacing:.08em;}
+  .face .f-seek{display:block;font-size:12px;color:var(--paper-dim);margin-top:3px;letter-spacing:.02em;}
+  .face[data-pos="top"]{left:50%;top:0;transform:translateX(-50%);}
+  .face[data-pos="right"]{right:0;top:50%;transform:translateY(-50%);}
+  .face[data-pos="bottom"]{left:50%;bottom:0;transform:translateX(-50%);}
+  .face[data-pos="left"]{left:0;top:50%;transform:translateY(-50%);}
+  .face:hover{border-color:var(--gold);}
+  .face.sel{
+    background:linear-gradient(180deg,rgba(240,200,104,.16),rgba(201,162,75,.06));
+    border-color:var(--gold-bright);box-shadow:0 0 18px rgba(240,200,104,.25);
+  }
+  .face.sel .f-no{color:var(--gold-bright);}
+  .face-desc{min-height:24px;text-align:center;font-size:13.5px;color:var(--paper);background:var(--ink-2);border:1px solid var(--line);border-radius:11px;padding:11px 14px;margin:12px 0 8px;}
+  .face-desc.empty{color:var(--paper-dim);}
+
+  /* ---- forms ---- */
+  .field{margin:18px 0;}
+  .field label{display:block;font-size:13.5px;color:var(--gold);letter-spacing:.04em;margin-bottom:8px;}
+  .field .sub{color:var(--paper-dim);font-size:12px;letter-spacing:0;}
+  input[type=text], textarea{
+    width:100%;font-family:var(--sans);font-size:15px;color:var(--paper);
+    background:var(--ink-2);border:1px solid var(--line);border-radius:11px;padding:13px 14px;resize:vertical;
+  }
+  input[type=text]::placeholder, textarea::placeholder{color:#6d5f4d;}
+  textarea{min-height:96px;line-height:1.7;}
+  .namebox{display:flex;gap:8px;}
+  .namebox input{flex:1;}
+  .dice{flex:0 0 auto;border:1px solid var(--line);background:var(--ink-2);color:var(--gold);border-radius:11px;padding:0 16px;cursor:pointer;font-size:13px;white-space:nowrap;}
+  .dice:hover{border-color:var(--gold);}
+  .chip{display:inline-flex;align-items:center;gap:8px;background:rgba(201,162,75,.1);border:1px solid var(--line);color:var(--gold);border-radius:999px;padding:6px 14px;font-size:13px;}
+  .consent{display:flex;gap:10px;align-items:flex-start;background:var(--ink-2);border:1px solid var(--line);border-radius:11px;padding:13px 14px;margin:16px 0;font-size:13px;color:var(--paper-dim);line-height:1.6;cursor:pointer;}
+  .consent input{margin-top:3px;width:17px;height:17px;accent-color:var(--gold);flex:0 0 auto;}
+
+  /* ---- my area / cards ---- */
+  .card{background:var(--ink-2);border:1px solid var(--line);border-radius:15px;padding:18px;margin:14px 0;}
+  .card-top{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:6px;}
+  .card-name{font-family:var(--serif);font-size:17px;color:var(--paper);}
+  .status{font-size:11.5px;letter-spacing:.1em;padding:4px 11px;border-radius:999px;white-space:nowrap;}
+  .status.wait{color:var(--gold);background:rgba(201,162,75,.1);border:1px solid var(--line);}
+  .status.done{color:var(--jade);background:rgba(122,155,134,.12);border:1px solid rgba(122,155,134,.3);}
+  .card-meta{font-size:12.5px;color:var(--paper-dim);margin:2px 0;}
+  .card-wish{font-size:13.5px;color:var(--paper);margin:8px 0 12px;font-family:var(--serif);line-height:1.7;}
+  .token-line{font-size:12px;color:var(--paper-dim);letter-spacing:.04em;}
+  .token{color:var(--gold-bright);font-family:var(--serif);letter-spacing:.18em;font-weight:600;}
+  .empty-state{text-align:center;color:var(--paper-dim);font-size:14px;padding:30px 10px;font-family:var(--serif);}
+
+  /* token receipt */
+  .receipt{text-align:center;background:linear-gradient(180deg,rgba(74,19,14,.5),rgba(36,26,20,.6));border:1px solid var(--line);border-radius:16px;padding:26px 20px;margin:8px 0 18px;}
+  .receipt .big-token{font-family:var(--serif);font-size:30px;letter-spacing:.22em;color:var(--gold-bright);font-weight:700;margin:6px 0;}
+  .receipt .keep{font-size:12.5px;color:var(--paper-dim);margin-top:10px;line-height:1.6;}
+
+  /* finished story card */
+  .story-card{background:linear-gradient(180deg,var(--ink-2),rgba(74,19,14,.25));border:1px solid var(--gold);border-radius:16px;padding:26px 22px;margin:10px 0 16px;}
+  .story-card .sc-eyebrow{font-size:11.5px;letter-spacing:.3em;color:var(--gold);text-align:center;}
+  .story-card .sc-title{font-family:var(--serif);font-size:22px;text-align:center;color:var(--paper);margin:8px 0 4px;letter-spacing:.04em;}
+  .story-card .sc-face{text-align:center;font-size:12.5px;color:var(--gold-bright);margin-bottom:16px;}
+  .story-card p{font-family:var(--serif);font-size:15px;line-height:1.95;color:var(--paper);margin:12px 0;}
+  .story-card .sc-words{font-style:italic;color:var(--gold-bright);text-align:center;border-top:1px solid var(--line);padding-top:14px;margin-top:16px;}
+  .divider{height:1px;background:var(--line);margin:22px 0;}
+  .demo-flag{font-size:11.5px;color:var(--sand);text-align:center;margin-top:26px;letter-spacing:.03em;}
+
+  @media (prefers-reduced-motion: reduce){
+    .flame{animation:none}.view{animation:none}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="crest">
+    <div class="flame" aria-hidden="true"></div>
+    <p class="eyebrow">三宝佛光寺 · 四面佛祖</p>
+    <h1 class="masthead-title">还愿日记</h1>
+    <p class="masthead-sub">许下的心愿，应验后回来，写下你的故事</p>
+  </header>
+
+  <!-- ============ HOME ============ -->
+  <section class="view active" id="view-home">
+    <p class="lede">愿望成真的那一刻，<br>值得被记住。</p>
+    <p class="note">这里不需要真实姓名 —— 给自己取一个化名，比如「一只野象」。</p>
+    <button class="btn" onclick="go('wish')">许下心愿</button>
+    <button class="btn ghost" onclick="openMine()">回到我的专区 · 我要还愿</button>
+  </section>
+
+  <!-- ============ MAKE A WISH ============ -->
+  <section class="view" id="view-wish">
+    <button class="backlink" onclick="go('home')">← 返回</button>
+
+    <div class="field">
+      <label>你的化名 <span class="sub">不必是真名，取个喜欢的就好</span></label>
+      <div class="namebox">
+        <input type="text" id="nickname" maxlength="16" placeholder="例如：一只野象">
+        <button class="dice" type="button" onclick="rollName()">换一个</button>
+      </div>
+    </div>
+
+    <p class="selector-label">你在哪一面许愿？</p>
+    <p class="selector-hint">四面佛祖四面朝向四方，各司其职。轻触选择。</p>
+    <div class="compass" id="compass" role="radiogroup" aria-label="选择许愿的面"></div>
+    <div class="face-desc empty" id="faceDesc">选择一面，查看所求</div>
+
+    <div class="field">
+      <label>你许下的愿望 <span class="sub">可简短，也可留白，只有你和佛祖知道</span></label>
+      <textarea id="wishText" maxlength="300" placeholder="写下心里所求……"></textarea>
+    </div>
+
+    <button class="btn" onclick="submitWish()">郑重许下</button>
+  </section>
+
+  <!-- ============ WISH RECEIPT ============ -->
+  <section class="view" id="view-receipt">
+    <p class="lede">心愿已记下。</p>
+    <p class="note">愿望应验后，回到这里、凭下面的凭证号，写下你的还愿日记。</p>
+    <div class="receipt">
+      <p class="token-line">你的凭证号</p>
+      <div class="big-token" id="receiptToken">——</div>
+      <p class="keep">请截图保存这个号码。<br>在同一部手机上，系统会自动记住你；换设备时凭它找回。</p>
+    </div>
+    <button class="btn" onclick="openMine()">进入我的专区</button>
+    <button class="btn ghost" onclick="go('home')">回到首页</button>
+  </section>
+
+  <!-- ============ MY AREA ============ -->
+  <section class="view" id="view-mine">
+    <button class="backlink" onclick="go('home')">← 返回首页</button>
+    <p class="selector-label" style="margin-bottom:4px;">我的专区</p>
+    <p class="selector-hint" id="mineHint">这里是你许下的心愿。</p>
+    <div id="mineList"></div>
+    <div class="divider"></div>
+    <p class="selector-hint">换了手机？用凭证号找回你的心愿。</p>
+    <div class="namebox" style="margin-bottom:8px;">
+      <input type="text" id="reclaimToken" placeholder="输入凭证号，例如 7K3M9Q" style="text-transform:uppercase;">
+      <button class="dice" type="button" onclick="reclaim()">找回</button>
+    </div>
+    <p class="selector-hint" id="reclaimMsg" style="min-height:18px;"></p>
+    <button class="btn ghost" onclick="go('wish')">再许一个新愿</button>
+  </section>
+
+  <!-- ============ RETURN / WRITE STORY ============ -->
+  <section class="view" id="view-return">
+    <button class="backlink" onclick="openMine()">← 返回我的专区</button>
+    <p class="lede" style="font-size:20px;">愿望成真了 —— 回来还愿。</p>
+    <p class="note">慢慢写，这是你和佛祖之间的一段故事。</p>
+
+    <div class="card" style="margin-bottom:20px;">
+      <div class="card-top">
+        <span class="card-name" id="r-name">——</span>
+        <span class="chip" id="r-face">——</span>
+      </div>
+      <p class="card-wish" id="r-wish"></p>
+    </div>
+
+    <div class="field">
+      <label>从许愿到应验，你大约等了多久？</label>
+      <input type="text" id="r-waited" maxlength="40" placeholder="例如：三个月 / 半年 / 一年多">
+    </div>
+    <div class="field">
+      <label>愿望是怎么实现的？发生了什么？ <span class="sub">这一段最珍贵</span></label>
+      <textarea id="r-how" maxlength="800" placeholder="把那件事娓娓道来……"></textarea>
+    </div>
+    <div class="field">
+      <label>此刻回来还愿，你最想说的一句话</label>
+      <input type="text" id="r-words" maxlength="80" placeholder="一句感恩的话">
+    </div>
+
+    <label class="consent">
+      <input type="checkbox" id="r-consent">
+      <span>我愿意让寺院在隐去真实身份、仅显示化名的前提下，分享我的还愿故事，让更多人感受到这份心意。</span>
+    </label>
+
+    <button class="btn oxblood" onclick="submitReturn()">完成还愿 · 写下日记</button>
+  </section>
+
+  <!-- ============ FINISHED STORY ============ -->
+  <section class="view" id="view-story">
+    <p class="lede" style="font-size:19px;">还愿圆满。</p>
+    <p class="note">愿你所求皆所愿，所行皆坦途。</p>
+    <div class="story-card" id="storyCard"></div>
+    <p class="selector-hint">截图，便可留作纪念，也可分享给想祈愿的人。</p>
+    <button class="btn ghost" onclick="openMine()">回到我的专区</button>
+    <button class="btn ghost" onclick="go('home')">回到首页</button>
+  </section>
+
+  <p class="demo-flag" id="demoFlag"></p>
+</div>
+
+<script>
+/* ============================================================
+   配置区 —— 寺院只需修改这里
+   ============================================================ */
+const CONFIG = {
+  // 部署好 Google Apps Script 后，把 Web App 网址粘贴到这里（以 /exec 结尾）
+  // 留空时，系统仍可在本机正常运行（数据只存在本设备，方便先试用）
+  APPS_SCRIPT_URL: "https://script.google.com/macros/s/AKfycbxlQVvvlM56GvkzKZYHJ8cq7-Sp-I0yNKdnoAvrM_LWNRVG96dpTKBxgm0G0Fic1kpc/exec"
+};
+
+/* 四面的含义 —— 寺院可按本寺的说法自行调整文字。
+   注：民间常以「事业/姻缘/财富/健康」四类来分；
+   正统泰传则以「慈悲喜舍」四无量心来释义。请确认本寺主张后再定稿。 */
+const FACES = [
+  { id:1, pos:'top',    no:'第一面', seek:'事业 · 功名', desc:'求事业顺遂、学业有成、前程似锦' },
+  { id:2, pos:'right',  no:'第二面', seek:'姻缘 · 家庭', desc:'求姻缘和合、家庭美满、贵人相助' },
+  { id:3, pos:'bottom', no:'第三面', seek:'财富 · 生意', desc:'求财源广进、生意兴隆、丰衣足食' },
+  { id:4, pos:'left',   no:'第四面', seek:'健康 · 平安', desc:'求身体安康、出入平安、儿女缘满' },
+];
+
+const NICKNAMES = ['一只野象','一盏夜灯','一片菩提叶','一缕檀香','一朵白莲','一只小鹿',
+  '一颗星子','一滴晨露','一只信鸽','一尾游鱼','一只萤火','一阵晚风','一串风铃',
+  '一只白象','一炷清香','一只锦鲤','一枚铜铃','一棵菩提','一弯新月','一只夜莺'];
+
+/* ============================================================
+   存储层：优先 localStorage；在受限环境（如预览）自动降级为内存
+   ============================================================ */
+const KEY='huanyuan_wishes_v1';
+const _mem={};
+const store={
+  read(){ try{ return localStorage.getItem(KEY); }catch(e){ return _mem[KEY]||null; } },
+  write(v){ try{ localStorage.setItem(KEY,v); }catch(e){ _mem[KEY]=v; } }
+};
+let hasLocal=true;
+try{ const t='__t'; localStorage.setItem(t,'1'); localStorage.removeItem(t);}catch(e){ hasLocal=false; }
+
+function loadWishes(){ try{ return JSON.parse(store.read())||[]; }catch(e){ return []; } }
+function saveWishes(arr){ store.write(JSON.stringify(arr)); }
+function upsert(wish){
+  const arr=loadWishes(); const i=arr.findIndex(w=>w.id===wish.id);
+  if(i>=0) arr[i]=wish; else arr.unshift(wish);
+  saveWishes(arr);
+}
+function getWish(id){ return loadWishes().find(w=>w.id===id); }
+
+/* ============================================================
+   后端同步：写入用 no-cors POST；读取用 JSONP（均可选）
+   ============================================================ */
+async function pushToSheet(payload){
+  if(!CONFIG.APPS_SCRIPT_URL) return;
+  try{
+    await fetch(CONFIG.APPS_SCRIPT_URL,{
+      method:'POST', mode:'no-cors',
+      headers:{'Content-Type':'text/plain;charset=utf-8'},
+      body:JSON.stringify(payload)
+    });
+  }catch(err){ console.warn('同步到表格失败（已暂存本机）：',err); }
+}
+function fetchById(id){
+  return new Promise((resolve)=>{
+    if(!CONFIG.APPS_SCRIPT_URL){ resolve(null); return; }
+    const cb='hy_cb_'+Date.now()+Math.floor(Math.random()*999);
+    let done=false;
+    const s=document.createElement('script');
+    window[cb]=function(res){ done=true; resolve(res&&res.ok?res.wish:null); cleanup(); };
+    function cleanup(){ try{delete window[cb];}catch(e){} if(s.parentNode)s.parentNode.removeChild(s); }
+    s.onerror=function(){ if(!done){done=true;resolve(null);cleanup();} };
+    s.src=CONFIG.APPS_SCRIPT_URL+'?id='+encodeURIComponent(id)+'&callback='+cb;
+    document.body.appendChild(s);
+    setTimeout(()=>{ if(!done){done=true;resolve(null);cleanup();} },8000);
+  });
+}
+
+/* ============================================================
+   视图与交互
+   ============================================================ */
+let selectedFace=null;
+
+function go(name){
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.getElementById('view-'+name).classList.add('active');
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+function genToken(){
+  const chars='ACEFHJKLMNPQRTUVWXY3479'; // 去掉易混字符
+  let t=''; for(let i=0;i<6;i++) t+=chars[Math.floor(Math.random()*chars.length)];
+  return t;
+}
+function rollName(){
+  document.getElementById('nickname').value=NICKNAMES[Math.floor(Math.random()*NICKNAMES.length)];
+}
+function faceName(id){ const f=FACES.find(x=>x.id===id); return f?f.no+' · '+f.seek:''; }
+
+function buildCompass(){
+  const c=document.getElementById('compass');
+  c.innerHTML='<div class="compass-core" aria-hidden="true">四面<br>佛祖</div>';
+  FACES.forEach(f=>{
+    const b=document.createElement('button');
+    b.type='button'; b.className='face'; b.dataset.pos=f.pos; b.dataset.id=f.id;
+    b.setAttribute('role','radio'); b.setAttribute('aria-checked','false');
+    b.innerHTML='<span class="f-no">'+f.no+'</span><span class="f-seek">'+f.seek+'</span>';
+    b.onclick=()=>selectFace(f.id);
+    c.appendChild(b);
+  });
+}
+function selectFace(id){
+  selectedFace=id;
+  document.querySelectorAll('.face').forEach(el=>{
+    const on=+el.dataset.id===id;
+    el.classList.toggle('sel',on); el.setAttribute('aria-checked',on);
+  });
+  const f=FACES.find(x=>x.id===id);
+  const d=document.getElementById('faceDesc');
+  d.textContent=f.desc; d.classList.remove('empty');
+}
+
+function submitWish(){
+  const nickname=(document.getElementById('nickname').value||'').trim()||'一位有缘人';
+  if(!selectedFace){ alert('请先选择你在哪一面许愿。'); return; }
+  const wish={
+    id:genToken(), nickname, face:selectedFace, faceName:faceName(selectedFace),
+    wish:(document.getElementById('wishText').value||'').trim(),
+    createdAt:new Date().toISOString(), status:'waiting'
+  };
+  upsert(wish);
+  pushToSheet({action:'create_wish', ...wish, createdAt:fmt(wish.createdAt)});
+  document.getElementById('receiptToken').textContent=wish.id;
+  go('receipt');
+}
+
+function openMine(){ renderMine(); go('mine'); }
+function renderMine(){
+  const list=document.getElementById('mineList');
+  const wishes=loadWishes();
+  document.getElementById('reclaimMsg').textContent='';
+  document.getElementById('reclaimToken').value='';
+  if(!wishes.length){
+    list.innerHTML='<div class="empty-state">这部设备上还没有记录。<br>许下第一个心愿，或用凭证号找回。</div>';
+    document.getElementById('mineHint').textContent='这里会保存你许下的心愿。';
+    return;
+  }
+  document.getElementById('mineHint').textContent='这里是你许下的心愿。';
+  list.innerHTML=wishes.map(w=>{
+    const done=w.status==='fulfilled';
+    return `<div class="card">
+      <div class="card-top">
+        <span class="card-name">${esc(w.nickname)}</span>
+        <span class="status ${done?'done':'wait'}">${done?'已还愿':'等待应验'}</span>
+      </div>
+      <p class="card-meta">${esc(w.faceName)} ｜ 许愿于 ${fmt(w.createdAt)}</p>
+      ${w.wish?`<p class="card-wish">「${esc(w.wish)}」</p>`:'<div style="height:6px"></div>'}
+      <p class="token-line">凭证号 <span class="token">${w.id}</span></p>
+      ${done
+        ? `<button class="btn ghost" style="margin-top:12px" onclick="viewStory('${w.id}')">重温我的还愿日记</button>`
+        : `<button class="btn" style="margin-top:12px" onclick="startReturn('${w.id}')">愿望实现了，我要还愿</button>`}
+    </div>`;
+  }).join('');
+}
+
+async function reclaim(){
+  const t=(document.getElementById('reclaimToken').value||'').trim().toUpperCase();
+  const msg=document.getElementById('reclaimMsg');
+  if(!t){ msg.textContent='请输入凭证号。'; return; }
+  if(getWish(t)){ msg.textContent='已在本设备找到这条心愿。'; renderMine(); return; }
+  msg.textContent='正在查找……';
+  const remote=await fetchById(t);
+  if(remote){
+    upsert({
+      id:remote.id, nickname:remote.nickname, face:+remote.face, faceName:remote.faceName,
+      wish:remote.wish, createdAt:remote.createdAt,
+      status:(remote.status==='已还愿')?'fulfilled':'waiting',
+      waited:remote.waited, how:remote.how, words:remote.words,
+      shareConsent:remote.shareConsent==='是'
+    });
+    msg.textContent='找回成功。'; renderMine();
+  }else{
+    msg.textContent= CONFIG.APPS_SCRIPT_URL
+      ? '没有找到这个凭证号，请检查是否输入正确。'
+      : '本设备未找到。请在原来的手机上打开，或联系寺院。';
+  }
+}
+
+let returningId=null;
+function startReturn(id){
+  const w=getWish(id); if(!w) return;
+  returningId=id;
+  document.getElementById('r-name').textContent=w.nickname;
+  document.getElementById('r-face').textContent=w.faceName;
+  document.getElementById('r-wish').innerHTML=w.wish?'当初所许：「'+esc(w.wish)+'」':'<span style="color:var(--paper-dim)">当初未写下愿望</span>';
+  document.getElementById('r-waited').value=w.waited||'';
+  document.getElementById('r-how').value=w.how||'';
+  document.getElementById('r-words').value=w.words||'';
+  document.getElementById('r-consent').checked=!!w.shareConsent;
+  go('return');
+}
+function submitReturn(){
+  const w=getWish(returningId); if(!w) return;
+  const how=(document.getElementById('r-how').value||'').trim();
+  if(!how){ alert('说说愿望是怎么实现的吧 —— 哪怕只有一两句。'); return; }
+  w.status='fulfilled';
+  w.fulfilledAt=new Date().toISOString();
+  w.waited=(document.getElementById('r-waited').value||'').trim();
+  w.how=how;
+  w.words=(document.getElementById('r-words').value||'').trim();
+  w.shareConsent=document.getElementById('r-consent').checked;
+  upsert(w);
+  pushToSheet({action:'fulfill_wish', id:w.id, nickname:w.nickname, face:w.face,
+    faceName:w.faceName, wish:w.wish, createdAt:fmt(w.createdAt),
+    fulfilledAt:fmt(w.fulfilledAt), waited:w.waited, how:w.how, words:w.words,
+    shareConsent:w.shareConsent});
+  viewStory(w.id);
+}
+
+function viewStory(id){
+  const w=getWish(id); if(!w) return;
+  const card=document.getElementById('storyCard');
+  card.innerHTML=`
+    <p class="sc-eyebrow">还 愿 日 记</p>
+    <p class="sc-title">「${esc(w.nickname)}」的故事</p>
+    <p class="sc-face">${esc(w.faceName)} ｜ 许愿 ${fmt(w.createdAt)} · 还愿 ${fmt(w.fulfilledAt)}</p>
+    ${w.wish?`<p>当初，我向四面佛祖许下：「${esc(w.wish)}」</p>`:''}
+    ${w.waited?`<p>这一等，约莫 ${esc(w.waited)}。</p>`:''}
+    <p>${esc(w.how).replace(/\n/g,'<br>')}</p>
+    ${w.words?`<p class="sc-words">「${esc(w.words)}」</p>`:''}
+  `;
+  go('story');
+}
+
+/* ---- utils ---- */
+function esc(s){ return (s||'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+function fmt(iso){ if(!iso) return ''; const d=new Date(iso); if(isNaN(d)) return iso;
+  return d.getFullYear()+'.'+String(d.getMonth()+1).padStart(2,'0')+'.'+String(d.getDate()).padStart(2,'0'); }
+
+/* ---- init ---- */
+buildCompass();
+rollName();
+(function(){
+  const flag=document.getElementById('demoFlag');
+  if(!CONFIG.APPS_SCRIPT_URL){
+    flag.textContent='试用模式：尚未连接表格，数据暂存于本设备。' + (hasLocal?'':'（当前预览环境不保存，部署到网站后即正常）');
+  }else if(!hasLocal){
+    flag.textContent='提示：当前预览环境不保存本机记录，部署到网站后即正常。';
+  }
+})();
+</script>
+</body>
+</html>
